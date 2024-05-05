@@ -80,7 +80,7 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
-	#results_table { 
+	.results_table { 
 		width: 95%;
 	}
 	#searchfield {
