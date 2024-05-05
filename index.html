@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>NeoDict</title>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script type="text/javascript">
+			var dictionary, re;
+			var tables = ["#results_neo", "#results_en"];
+
+			$(document).ready(function() {
+				$("#searchfield").focus();
+				$("#searchfield").on("keypress", function(event) {
+					if(event.key === "Enter") {
+						event.preventDefault;
+						$("#searchbutton").click();
+					}
+				});
+
+				$("body").on("keydown", function() {
+					$("#searchfield").focus();
+				});
+
+				Papa.parse('data/neodict.csv', {
+					download: true,
+					delimiter: '|',
+					complete: function(results) {
+						dictionary = results.data;
+					}
+				});
+			});
+			
+			function searchNeo(entry) {
+				return re.test(entry[0]);
+			}
+
+			function searchEnglish(entry) {
+				return re.test(entry[1]);
+			}
+
+			function doSearch() {
+				$("#searchfield").focus();
+				$("#searchfield").select();
+
+				var query = $("#searchfield").val().trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\\\*/g, ".*?");
+
+				if(query.length > 0) {
+					$(".results_table").hide();
+					re = new RegExp("\\b" + query + "\\b");
+
+					var results = [[], []]
+					if($("#search_neo").is(":checked"))
+						results[0] = dictionary.filter(searchNeo);
+					if($("#search_en").is(":checked"))
+						results[1] = dictionary.filter(searchEnglish);
+
+					if(results[0].length > 0 || results[1].length > 0) {
+						$("#noresults").hide();
+						$(".results_table tr:has(td)").remove();
+						$(document).prop("title", $("#searchfield").val() + " - NeoDict");
+
+						var re_start = new RegExp("^\\b" + query + "\\b");
+						results.forEach(function(ra, i) {
+							if(ra.length > 0) {
+								var entries = [[], []];
+								ra.sort(function(a, b){return a[i] < b[i] ? -1 : 1});
+								ra.forEach(function(r) {
+									if(re_start.test(r[i]))
+										entries[0].push(r);
+									else
+										entries[1].push(r);
+								});
+								entries.forEach(function(e) {
+									e.forEach(function(r) {
+										$(tables[i]).append("<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>");
+									});
+								});
+								$(tables[i]).show();
+							}
+						});
+					}
+					else {
+						$("#noresults").show();
+						$(document).prop("title", "NeoDict");
+					}
+				}
+			}
+		</script>
+
+		<link rel="stylesheet" href="css/style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/fontawesome.min.css" integrity="sha512-UuQ/zJlbMVAw/UU8vVBhnI4op+/tFOpQZVT+FormmIEhRSCnJWyHiBbEVgM4Uztsht41f3FzVWgLuwzUqOObKw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/solid.min.css" integrity="sha512-Hp+WwK4QdKZk9/W0ViDvLunYjFrGJmNDt6sCflZNkjgvNq9mY+0tMbd6tWMiAlcf1OQyqL4gn2rYp7UsfssZPA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<link rel="shortcut icon" type="image/x-icon" href="img/favicon.ico">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	</head>
+	<body>
+		<img src="img/neo_logo.png" id="logo">
+
+		<input type="text" id="searchfield" autocomplete="off" value="">
+		<button onclick="doSearch()" id="searchbutton"><i class="fa-solid fa-magnifying-glass"></i></button>
+		<div id="info">Use asterisk (*) as wildcard character.</div>
+		<input type="checkbox" id="search_neo" checked><label for="search_neo">Search Neo</label>
+		<input type="checkbox" id="search_en" checked><label for="search_en">Search English</label>
+
+		<div id="noresults">No results</div>
+
+		<table class="results_table" id="results_neo">
+			<tr><th colspan="2">Neo &ShortRightArrow; English</th></tr>
+		</table>
+		<table class="results_table" id="results_en">
+			<tr><th colspan="2">Neo &ShortLeftArrow; English</th></tr>
+		</table>
+	</body>
+</html>
