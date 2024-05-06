@@ -25,6 +25,7 @@
 				Papa.parse('data/neodict.csv', {
 					download: true,
 					delimiter: '|',
+					skipEmptyLines: true,
 					complete: function(results) {
 						dictionary = results.data;
 					}
@@ -32,18 +33,18 @@
 			});
 			
 			function searchNeo(entry) {
-				return re.test(entry[0]);
+				return re.test(entry[0].toLowerCase());
 			}
 
 			function searchEnglish(entry) {
-				return re.test(entry[1]);
+				return re.test(entry[1].toLowerCase());
 			}
 
 			function doSearch() {
 				$("#searchfield").focus();
 				$("#searchfield").select();
 
-				var query = $("#searchfield").val().trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\\\*/g, ".*?");
+				var query = $("#searchfield").val().trim().toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\\\*/g, ".*?");
 
 				if(query.length > 0) {
 					$(".results_table").hide();
@@ -66,7 +67,7 @@
 								var entries = [[], []];
 								ra.sort(function(a, b){return a[i] < b[i] ? -1 : 1});
 								ra.forEach(function(r) {
-									if(re_start.test(r[i]))
+									if(re_start.test(r[i].toLowerCase()))
 										entries[0].push(r);
 									else
 										entries[1].push(r);
