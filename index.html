@@ -74,7 +74,7 @@
 								});
 								entries.forEach(function(e) {
 									e.forEach(function(r) {
-										$(tables[i]).append("<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>");
+										$(tables[i]).append("<tr><td>" + r[i] + "</td><td>" + r[1-i] + "</td></tr>");
 									});
 								});
 								$(tables[i]).show();
@@ -111,7 +111,7 @@
 			<tr><th colspan="2">Neo &ShortRightArrow; English</th></tr>
 		</table>
 		<table class="results_table" id="results_en">
-			<tr><th colspan="2">Neo &ShortLeftArrow; English</th></tr>
+			<tr><th colspan="2">English &ShortRightArrow; Neo</th></tr>
 		</table>
 	</body>
 </html>
