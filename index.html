@@ -3,8 +3,13 @@
 	<head>
 		<meta charset="utf-8">
 		<title>NeoDict</title>
+		<meta name="description" content="A searchable Neo-English dictionary.">
 		<meta property="og:title" content="Neo-English Dictionary">
 		<meta property="og:site_name" content="NeoDict">
+		<meta property="og:type" content="website">
+		<meta property="og:description" content="A searchable Neo-English dictionary.">
+		<meta property="og:url" content="https://sinelaude.github.io/neodict/">
+		<meta property="og:image" content="https://sinelaude.github.io/neodict/img/neo_logo.png">
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js" integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -21,7 +26,7 @@
 		<img src="img/neo_logo.png" id="logo" alt="Neo logo">
 
 		<input type="text" id="searchfield" autocomplete="off" value="">
-		<button onclick="doSearch()" id="searchbutton"><i class="fa-solid fa-magnifying-glass"></i></button>
+		<button onclick="doSearch(true)" id="searchbutton"><i class="fa-solid fa-magnifying-glass"></i></button>
 		<div id="info">Use asterisk (*) as wildcard character.</div>
 		<input type="checkbox" id="search_neo" checked><label for="search_neo">Search Neo</label>
 		<input type="checkbox" id="search_en" checked><label for="search_en">Search English</label>
